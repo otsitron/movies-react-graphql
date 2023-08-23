@@ -1,19 +1,25 @@
-import React, { useState, useEffect } from 'react'
-import { Card, Row, Col, Input, Divider, Switch, Button } from 'antd';
+import { useState, useEffect } from 'react'
+import { Card, Row, Col, Input, Divider, Button } from 'antd';
 import { PlusOutlined, SortAscendingOutlined, SearchOutlined } from '@ant-design/icons';
 import Movie from './movie/Movie';
 import CreateMovieModal from '../create-movie-modal/CreateMovieModal';
+import { MoviePropsType } from '../../types/Types';
 
-const Movies = ({ movies = [], refetch }) => {
-  const [showAddModal, setShowAddModal] = useState(false)
-  const [searchQuery, setSearchQuery] = useState('')
-  const [filteredMovies, setFilteredMovies] = useState(movies)
-  const [sortOption, setSortOption] = useState(null)
+interface MoviesProps {
+  movies: MoviePropsType[];
+  refetch: () => void;
+}
+
+const Movies: React.FC<MoviesProps> = ({ movies = [], refetch }) => {
+  const [showAddModal, setShowAddModal] = useState<boolean>(false)
+  const [searchQuery, setSearchQuery] = useState<string>('')
+  const [filteredMovies, setFilteredMovies] = useState<MoviePropsType[]>(movies)
+  const [sortOption, setSortOption] = useState<string | null>(null)
 
   useEffect(() => {
-    const filtered = movies.filter(({title, likes}) => title.toLowerCase().includes(searchQuery.toLowerCase()));
+    const filtered = movies.filter(({title}: {title: string}) => title.toLowerCase().includes(searchQuery.toLowerCase()));
     if (sortOption === 'liked') {
-      filtered.sort((a, b) => b.likes - a.likes)
+      filtered.sort((a, b) => (b.likes || 0) - (a.likes || 0))
     } else if (sortOption === 'title') {
       filtered.sort((a, b) => a.title.localeCompare(b.title));
     }
@@ -41,7 +47,7 @@ const Movies = ({ movies = [], refetch }) => {
           <Button 
             icon={<SortAscendingOutlined />}
             type={sortOption === 'liked' ? 'primary' : 'default'} 
-            onClick={()=>setSortOption(sortOption === 'liked' ? null : 'liked')}>Sort By Most Liked</Button>
+            onClick={()=>setSortOption(sortOption === 'liked' ? null : "liked")}>Sort By Most Liked</Button>
         </Col>
         <Col>
           <Button 

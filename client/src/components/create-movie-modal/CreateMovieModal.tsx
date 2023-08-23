@@ -3,7 +3,13 @@ import {  useMutation } from '@apollo/client';
 import { Modal, Input, Form } from 'antd';
 import { CREATE_MOVIE_MUTATION } from '../../graphql/queries'
 
-const CreateMovieModal = ({refetch, showAddModal, setShowAddModal}) => {
+interface CreateMovieModalProps {
+  refetch: () => void;
+  showAddModal: boolean;
+  setShowAddModal: (show: boolean) => void;
+}
+
+const CreateMovieModal: React.FC<CreateMovieModalProps> = ({refetch, showAddModal, setShowAddModal}) => {
 
   const [newMovieTitle, setNewMovieTitle] = useState('');
   const [newMovieDescription, setNewMovieDescription] = useState('');

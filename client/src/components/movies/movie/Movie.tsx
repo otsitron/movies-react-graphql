@@ -1,15 +1,21 @@
-import React, {useCallback} from 'react'
+import {useCallback} from 'react'
 import {  useMutation } from '@apollo/client';
 import { Card, notification } from 'antd';
 import { LikeOutlined, DislikeOutlined, DeleteOutlined } from '@ant-design/icons';
 import { UPDATE_MOVIE_MUTATION, DELETE_MOVIE_MUTATION } from '../../../graphql/queries';
+import { MoviePropsType } from '../../../types/Types';
 
-const Movie = ({ movieProps, refetch }) => {
+interface MovieComponentProps {
+    movieProps: MoviePropsType;
+    refetch: () => void;
+}
+
+const Movie: React.FC<MovieComponentProps> = ({ movieProps, refetch }) => {
     const { title, likes, dislikes, description, id } = movieProps;
 
     const [updateMovie] = useMutation(UPDATE_MOVIE_MUTATION)
     const [deleteMovie] = useMutation(DELETE_MOVIE_MUTATION, {
-        onCompleted: ({ movie }) => {
+        onCompleted: ({ movie } : {movie: {title: string}}) => {
             refetch();
             notification.info({
               message: `${movie.title} is now deleted`,

@@ -8,9 +8,7 @@ function App() {
     <ApolloProvider client={client}>
       <main className="section">
         <Routes>
-          <Route exact path="/"
-            element={<Movies />}
-          />
+          <Route path="/" element={<Movies />} />
         </Routes>
       </main>
     </ApolloProvider>
